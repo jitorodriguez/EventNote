@@ -16,7 +16,7 @@
 		
 		$id = $_GET['user_id'];
 
-		$sql = "SELECT U.username, U.name, U.email  FROM users U WHERE U.s_id = " . $id;
+		$sql = "SELECT U.username, U.name, U.email FROM users U WHERE U.s_id = " . $id;
 		$result = $conn->query($sql);
 
 		$rows = array();
@@ -37,8 +37,23 @@
 	    $id = $data->user_id;
 	    $username = $data->username;
 	    $email = $data->email;
+	    $name = $data->name;
+	    $pass = $data->password;
 
-	    $sql = "UPDATE users SET username='" . $username . "', email='" . $email . "' WHERE s_id=" . $id;
+	    $sql = "UPDATE users SET username='" . $username . "', email='" . $email . "', name='" . $name . "', password ='" . $pass . "' WHERE s_id =" . $id;
+
+	    /*
+	    if(isset($data['password']))
+	    {
+	    	$pass = $data->password;
+	    	$sql .= ", password ='" . $pass . "' WHERE s_id =" . $id;
+	    }
+	    else
+	    {
+	    	$sql .= " WHERE s_id =" . $id;
+	    }
+	    */
+
 		if($conn->query($sql) === TRUE){
 
 			$response_array['status'] = "success";
