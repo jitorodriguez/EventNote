@@ -77,6 +77,39 @@
 				print json_encode($response_array);
 			}
 		}
+		else if($cmdtype === "update")
+		{
+			$id = $data->user_id;
+			$event = $data->event_info;
+			$location = $data->location_info;
+
+			$sql = "START TRANSACTION;
+
+			UPDATE eventmeeting SET name='" . $event->name . "', date='" . $event->date . "', start_time='" . $event->start_time . "', end_time='" . $event->end_time . "', description='" . $event->description . "', phone_num=" . $event->phone_num . ", email='" . $event->email . "' WHERE e_id=" . $event->e_id . " AND s_id = " . $id . ";
+
+			SET @locationKey = (SELECT location_id FROM eventmeeting WHERE e_id =" . $event->e_id . " AND s_id =" . $id . ");
+
+			UPDATE location SET latitude=" . $location->latitude . ", longitude=" . $location->longitude . ", specificName='" . $location->name . "' WHERE location_id=@locationKey;
+
+			COMMIT;";
+
+			$results = mysqli_multi_query($conn, $sql);
+
+			if($results)
+			{
+				echo "Success updating event.";
+				$response_array['status'] = "success";
+				$response_array['message'] = $conn->error;
+				print json_encode($response_array);
+			}
+			else
+			{
+				echo "Unsuccessfully updated event.";
+				$response_array['status'] = "failure updating event";
+				$response_array['message'] = $conn->error;
+				print json_encode($response_array);
+			}
+		}
 	}
 
 ?>
