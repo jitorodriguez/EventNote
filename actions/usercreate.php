@@ -39,12 +39,28 @@
 	    $name = $data->name;
 	    $password = $data->password;
 
-	    $sql = "INSERT INTO users (username, email, name, password) VALUES ('" . $username . "', '" . $email . "', '" . $name . "', '" . $password . "')";
+	    $sql = "INSERT INTO users (username, email, name, password) VALUES ('" . $username . "', '" . $email . "', '" . $name . "', '" . $password . "');";
 		if($conn->query($sql) === TRUE){
 
 			$response_array['status'] = "successfully created user";
 			$response_array['message'] = "";
-			print json_encode($response_array);
+			$sql = "INSERT INTO `student`(`s_id`, `uni_id`) VALUES (" . $conn->insert_id . ",1)";
+			echo $sql;
+
+			//INSERT INTO `student`(`s_id`, `uni_id`) VALUES (19,1)
+			//INSERT INTO 'student'('s_id', 'uni_id') VALUES (23,1)
+			//$sql = "INSERT INTO 'student'('s_id', 'uni_id') VALUES (" . $conn->insert_id . ",1)";
+
+			if($conn->query($sql) === TRUE)
+			{
+				print json_encode($response_array);
+			}
+			else
+			{
+				$response_array['status'] = "Failed on transfering User to Student.";
+				$response_array['message'] = $conn->error;
+				print json_encode($response_array);
+			}
 		}
 		else{
 
