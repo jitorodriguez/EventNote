@@ -11,9 +11,109 @@
 	    die("Connection failed: " . $conn->connect_error);
 	} 
 
-	if($_SERVER['REQUEST_METHOD'] === 'GET'){
-		
+	if($_SERVER['REQUEST_METHOD'] === 'GET')
+	{
+		//$id = ( isset( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) ? intval( $_GET['user_id'] ) : -1;
 
+		if( isset( $_GET['uni']) && isset( $_GET['user_id']) )
+		{
+			//Univeristy ID passed in with student id, find all private and public events possible from university
+			$u_id = $_GET['user_id'];
+			$uni = $_GET['uni'];
+
+			$sql = "(SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id AND E.uni_id = " . $uni . ") UNION (SELECT DISTINCT E1.e_id, E1.location_id, E1.event_type, E1.name, E1.date, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName FROM eventmeeting E1, location L1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . " AND S.uni_id = " . $uni . "))";
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+				print json_encode($rows);
+			} 
+			else 
+			{
+				echo $conn->error;
+				print json_encode("{}");
+			}
+		}
+		else if(isset( $_GET['user_id']) && isset( $_GET['private']))
+		{
+			//student id only, find all private and public events possible
+			$u_id = $_GET['user_id'];
+
+			$sql = "SELECT DISTINCT E1.e_id, E1.location_id, E1.event_type, E1.name, E1.date, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName FROM eventmeeting E1, location L1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . ")";
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+				print json_encode($rows);
+			} 
+			else 
+			{
+				echo $conn->error;
+				print json_encode("{}");
+			}
+		}
+		else if(isset( $_GET['user_id']))
+		{
+			//student id only, find all private and public events possible
+			$u_id = $_GET['user_id'];
+
+			$sql = "(SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id) UNION (SELECT DISTINCT E1.e_id, E1.location_id, E1.event_type, E1.name, E1.date, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName FROM eventmeeting E1, location L1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . "))";
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+				print json_encode($rows);
+			} 
+			else 
+			{
+				echo $conn->error;
+				print json_encode("{}");
+			}
+		}
+		else
+		{
+			//Nothing passed in, get public events
+			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id";
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+				print json_encode($rows);
+			} 
+			else 
+			{
+				echo $conn->error;
+				print json_encode("{}");
+			}
+		}
 	}
 	else if($_SERVER['REQUEST_METHOD'] === 'POST')
 	{
