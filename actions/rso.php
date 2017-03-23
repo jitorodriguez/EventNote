@@ -70,6 +70,30 @@
 				print json_encode($response_array);
 			}
 		}
+		else if($cmdtype === "leave")
+		{
+			$id = $data->user_id;
+			$rso = $data->rso_id;
+
+			$sql = "DELETE FROM joinrso WHERE s_id = " . $id . " AND rso_id = " . $rso . ";";
+
+			$results = $conn->query($sql);
+
+			if($results)
+			{
+				echo "Success leaving rso.";
+				$response_array['status'] = "success";
+				$response_array['message'] = "";
+				print json_encode($response_array);
+			}
+			else
+			{
+				echo "Failure leaving rso.";
+				$response_array['status'] = "failure leaving rso";
+				$response_array['message'] = $conn->error;
+				print json_encode($response_array);
+			}
+		}
 		else if($cmdtype === "delete")
 		{
 			$id = $data->user_id;
@@ -77,11 +101,13 @@
 
 			$sql = "START TRANSACTION;
 
-			DELETE FROM rso WHERE e_id = " . $rso . " AND s_id = " . $id . ";
+			DELETE FROM rso WHERE rso_id = " . $rso . " AND s_id = " . $id . ";
 
 			DELETE FROM admin WHERE s_id = " . $id . " AND NOT EXISTS(SELECT J.rso_id FROM joinrso J WHERE (SELECT COUNT(S.s_id) FROM joinrso S, rso R WHERE S.rso_id = J.rso_id AND J.rso_id = R.rso_id AND  R.s_id = " . $id . ") > 5;
 
 			COMMIT;";
+
+			echo $sql;
 
 			$results = mysqli_multi_query($conn, $sql);
 
