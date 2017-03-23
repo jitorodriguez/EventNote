@@ -152,30 +152,59 @@
 			$event = $data->event_info;
 			$location = $data->location_info;
 
-			$sql = "START TRANSACTION;
+			$admitted = 1;
 
-			INSERT INTO location(latitude, longitude, specificName) VALUES(" . $location->latitude . ", " . $location->longitude . ", '" . $location->name . "');
-
-			SET @locationKey = LAST_INSERT_ID();
-
-			INSERT INTO eventmeeting (location_id, s_id, event_type, name, date, start_time, end_time, description, phone_num, email) VALUES (@locationKey, " . $id . ", " . $event->event_type . ", '" . $event->name . "', '" . $event->date . "', '" . $event->start_time . "', '" . $event->end_time . "', '" . $event->description . "', " . $event->phone_num . ", '" . $event->email . "');
-
-			COMMIT;";
-
-			$results = mysqli_multi_query($conn, $sql);
-
-			if($results)
+			if($event->event_type == 2)
 			{
-				echo "Successfully performed Event Creation transaction.";
-				$response_array['status'] = "success";
-				$response_array['message'] = "";
-				print json_encode($response_array);
+				//USer attempting to create RSO event. Check to see if user is an admin.
+				$tempSql = "SELECT A.s_id FROM admin A WHERE A.s_id = " . $id . ";";
+				$results = $conn->query($tempSql);
+
+				if( mysqli_num_rows($results) == 0)
+				{
+					//USer is not an admin, return error and leave;
+					$admitted = 0;
+				}
+				else
+				{
+					$admitted = 1;
+				}
+			}
+
+			if($admitted == 1)
+			{
+				$sql = "START TRANSACTION;
+
+				INSERT INTO location(latitude, longitude, specificName) VALUES(" . $location->latitude . ", " . $location->longitude . ", '" . $location->name . "');
+
+				SET @locationKey = LAST_INSERT_ID();
+
+				INSERT INTO eventmeeting (location_id, s_id, event_type, name, date, start_time, end_time, description, phone_num, email) VALUES (@locationKey, " . $id . ", " . $event->event_type . ", '" . $event->name . "', '" . $event->date . "', '" . $event->start_time . "', '" . $event->end_time . "', '" . $event->description . "', " . $event->phone_num . ", '" . $event->email . "');
+
+				COMMIT;";
+
+				$results = mysqli_multi_query($conn, $sql);
+
+				if($results)
+				{
+					echo "Successfully performed Event Creation transaction.";
+					$response_array['status'] = "success";
+					$response_array['message'] = "";
+					print json_encode($response_array);
+				}
+				else
+				{
+					echo "Unsuccessfully peformed Event Creation transaction.";
+					$response_array['status'] = "failure event creation";
+					$response_array['message'] = $conn->error;
+					print json_encode($response_array);
+				}
 			}
 			else
 			{
-				echo "Unsuccessfully peformed Event Creation transaction.";
-				$response_array['status'] = "failure event creation";
-				$response_array['message'] = $conn->error;
+				echo "User not permitted to create RSO. (NOT AN ADMIN)";
+				$response_array['status'] = "failure event creation (NOT ADMIN)";
+				$response_array['message'] = "";
 				print json_encode($response_array);
 			}
 		}
