@@ -13,6 +13,7 @@
 
 	if($_SERVER['REQUEST_METHOD'] === 'GET'){
 		//The request is using a GET method
+
 		
 		$id = $_GET['user_id'];
 

@@ -66,6 +66,32 @@
 				print json_encode("{}");
 			}
 		}
+		else if(isset( $_GET['user_id']) && isset( $_GET['rso']))
+		{
+			$u_id = $_GET['user_id'];
+
+			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L, student S WHERE E.event_type = 2 AND S.s_id =" . $u_id . " AND S.uni_id = E.uni_id AND E.location_id = L.location_id";
+
+			echo $sql;
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+				print json_encode($rows);
+			}
+			else 
+			{
+				echo $conn->error;
+				print json_encode("{}");
+			}
+		}
 		else if(isset( $_GET['user_id']))
 		{
 			//student id only, find all private and public events possible

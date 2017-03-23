@@ -14,7 +14,55 @@
 	if($_SERVER['REQUEST_METHOD'] === 'GET')
 	{
 		//$id = ( isset( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) ? intval( $_GET['user_id'] ) : -1;
-		
+
+		if(isset($_GET['rso_id']))
+		{
+			$rid = $_GET['rso_id'];
+
+			$sql = "SELECT U.name AS owner, R.name, R.description, S.name AS university FROM users U, rso R, university S, student T WHERE R.rso_id = " . $rid . " AND U.s_id = R.s_id AND U.s_id = T.s_id AND T.uni_id = S.uni_id;";
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+				print json_encode($rows);
+			} 
+			else 
+			{
+				echo $conn->error;
+				print json_encode("{}");
+			}
+		}
+		else if(isset($_GET['user_id']))
+		{
+			$id = $_GET['user_id'];
+
+			$sql = "SELECT R.name, R.description, R.rso_id FROM rso R, student S, student S1 WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id";
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+				print json_encode($rows);
+			} 
+			else 
+			{
+				echo $conn->error;
+				print json_encode("{}");
+			}
+		}
 	}
 	else if($_SERVER['REQUEST_METHOD'] === 'POST')
 	{
@@ -103,7 +151,7 @@
 
 			DELETE FROM rso WHERE rso_id = " . $rso . " AND s_id = " . $id . ";
 
-			DELETE FROM admin WHERE s_id = " . $id . " AND NOT EXISTS(SELECT J.rso_id FROM joinrso J WHERE (SELECT COUNT(S.s_id) FROM joinrso S, rso R WHERE S.rso_id = J.rso_id AND J.rso_id = R.rso_id AND  R.s_id = " . $id . ") > 5;
+			DELETE FROM admin WHERE s_id = " . $id . " AND NOT EXISTS(SELECT J.rso_id FROM joinrso J WHERE (SELECT COUNT(S.s_id) FROM joinrso S, rso R WHERE S.rso_id = J.rso_id AND J.rso_id = R.rso_id AND  R.s_id = " . $id . " > 4));
 
 			COMMIT;";
 

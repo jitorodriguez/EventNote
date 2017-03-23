@@ -45,7 +45,6 @@
 			$response_array['status'] = "successfully created user";
 			$response_array['message'] = "";
 			$sql = "INSERT INTO `student`(`s_id`, `uni_id`) VALUES (" . $conn->insert_id . ",1)";
-			echo $sql;
 
 			//INSERT INTO `student`(`s_id`, `uni_id`) VALUES (19,1)
 			//INSERT INTO 'student'('s_id', 'uni_id') VALUES (23,1)
