@@ -14,10 +14,10 @@
 	if($_SERVER['REQUEST_METHOD'] === 'GET'){
 		//The request is using a GET method
 
-		
 		$id = $_GET['user_id'];
 
-		$sql = "SELECT U.username, U.name, U.email FROM users U WHERE U.s_id = " . $id;
+		$sql = "SELECT U.username, U.name, U.email, S.major, S.minor, S.description FROM users U, student S WHERE U.s_id = " . $id . " AND U.s_id = S.s_id";
+
 		$result = $conn->query($sql);
 
 		$rows = array();
@@ -34,26 +34,18 @@
 	}
 	else if($_SERVER['REQUEST_METHOD'] === 'POST')
 	{
-
 	    $id = $data->user_id;
 	    $username = $data->username;
 	    $email = $data->email;
 	    $name = $data->name;
 	    $pass = $data->password;
+	    $major = $data->major;
+	    $minor = $data->minor;
+	    $description = $data->description;
 
-	    $sql = "UPDATE users SET username='" . $username . "', email='" . $email . "', name='" . $name . "', password ='" . $pass . "' WHERE s_id =" . $id;
+	    $sql = "UPDATE users U, student S SET U.username='" . $username . "', U.email='" . $email . "', U.name='" . $name . "', U.password ='" . $pass . "', S.major = '" . $major . "', S.minor ='" . $minor . "', S.description = '" . $description . "' WHERE U.s_id =" . $id . " AND S.s_id = U.s_id;";
 
-	    /*
-	    if(isset($data['password']))
-	    {
-	    	$pass = $data->password;
-	    	$sql .= ", password ='" . $pass . "' WHERE s_id =" . $id;
-	    }
-	    else
-	    {
-	    	$sql .= " WHERE s_id =" . $id;
-	    }
-	    */
+	    echo $sql;
 
 		if($conn->query($sql) === TRUE){
 
