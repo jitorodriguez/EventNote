@@ -109,30 +109,5 @@
 				print json_encode($response_array);
 			}
 		}
-		else if($cmdtype === "delete")
-		{
-			$id = $data->user_id;
-			$event = $data->event_id;
-
-			$sql = "DELETE FROM comments WHERE s_id = " . $id . " AND e_id = " . $event;
-
-			$results = $conn->query($sql);
-
-			if($results)
-			{
-				echo "Success creating comment.";
-				$response_array['status'] = "success";
-				$response_array['message'] = "";
-				print json_encode($response_array);
-			}
-			else
-			{
-				echo "Unsuccessfully created comment.";
-				$response_array['status'] = "failure creating comment";
-				$response_array['message'] = $conn->error;
-				print json_encode($response_array);
-			}
-		}
 	}
-
 ?>
