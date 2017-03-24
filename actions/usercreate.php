@@ -39,31 +39,31 @@
 	    $name = $data->name;
 	    $password = $data->password;
 
-	    $sql = "INSERT INTO users (username, email, name, password) VALUES ('" . $username . "', '" . $email . "', '" . $name . "', '" . $password . "');";
-		if($conn->query($sql) === TRUE){
+	    $sql = "START TRANSACTION;
 
-			$response_array['status'] = "successfully created user";
-			$response_array['message'] = "";
-			$sql = "INSERT INTO `student`(`s_id`, `uni_id`) VALUES (" . $conn->insert_id . ",1)";
+				INSERT INTO users (username, email, name, password) VALUES ('" . $username . "', '" . $email . "', '" . $name . "', '" . $password . "');
 
-			//INSERT INTO `student`(`s_id`, `uni_id`) VALUES (19,1)
-			//INSERT INTO 'student'('s_id', 'uni_id') VALUES (23,1)
-			//$sql = "INSERT INTO 'student'('s_id', 'uni_id') VALUES (" . $conn->insert_id . ",1)";
+				SET @lastId = LAST_INSERT_ID();
 
-			if($conn->query($sql) === TRUE)
-			{
-				print json_encode($response_array);
-			}
-			else
-			{
-				$response_array['status'] = "Failed on transfering User to Student.";
-				$response_array['message'] = $conn->error;
-				print json_encode($response_array);
-			}
+				INSERT INTO student(s_id, uni_id) VALUES (@lastId, 1);
+
+				COMMIT;";
+
+				echo $sql;
+
+		$results = mysqli_multi_query($conn, $sql);
+
+		if($results)
+		{
+			echo "Successfully Created user account.";
+			$response_array['status'] = "success";
+			$response_array['message'] = $conn->error;
+			print json_encode($response_array);
 		}
-		else{
-
-			$response_array['status'] = "failure creating user";
+		else
+		{
+			echo "Unsuccessfully created user account.";
+			$response_array['status'] = "failure event creation";
 			$response_array['message'] = $conn->error;
 			print json_encode($response_array);
 		}
