@@ -39,6 +39,31 @@
 				print json_encode("{}");
 			}
 		}
+		else if(isset($_GET['user_id']) && isset($_GET['admin']))
+		{
+			//Get RSO user can possibly create event for
+			$id = $_GET['user_id'];
+
+			$sql = "SELECT R.name, R.rso_id FROM rso R WHERE R.s_id = " . $id . ";";
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+				print json_encode($rows);
+			} 
+			else 
+			{
+				echo $conn->error;
+				print json_encode("{}");
+			}
+		}
 		else if(isset($_GET['user_id']))
 		{
 			$id = $_GET['user_id'];
@@ -62,6 +87,11 @@
 				echo $conn->error;
 				print json_encode("{}");
 			}
+		}
+		else
+		{
+			//Get all Rso_id's with associated name to later create event
+
 		}
 	}
 	else if($_SERVER['REQUEST_METHOD'] === 'POST')

@@ -119,7 +119,7 @@
 		}
 		else if(isset( $_GET['event_id']))
 		{
-			//student id only, find all private and public events possible
+			//event id only, find this event
 			$e_id = $_GET['event_id'];
 
 			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND E.e_id = " . $e_id . " AND E.location_id = L.location_id";
