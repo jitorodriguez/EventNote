@@ -14,23 +14,48 @@
 	if($_SERVER['REQUEST_METHOD'] === 'GET'){
 		//The request is using a GET method
 
-		$id = $_GET['user_id'];
+		if(isset( $_GET['user']) && isset( $_GET['pass']))
+		{
+			$user = $_GET['user'];
+			$pass = $_GET['pass'];
 
-		$sql = "SELECT U.username, U.name, U.email, S.major, S.minor, S.description FROM users U, student S WHERE U.s_id = " . $id . " AND U.s_id = S.s_id";
+			$sql = "SELECT U.s_id FROM users U WHERE U.username = '" . $user . "' AND U.password = '" . $pass . "';"; 
 
-		$result = $conn->query($sql);
+			$result = $conn->query($sql);
 
-		$rows = array();
+			$rows = array();
 
-		if ($result->num_rows > 0) {
-		    // output data of each row
-		    while($r = $result->fetch_assoc()) {
-		        $rows[] = $r;
-		    }
-		    print json_encode($rows);
-		} else {
-		    print json_encode("{}");
+			if ($result->num_rows > 0) {
+			    // output data of each row
+			    while($r = $result->fetch_assoc()) {
+			        $rows[] = $r;
+			    }
+			    print json_encode($rows);
+			} else {
+			    print json_encode("{}");
+			}
 		}
+		else
+		{
+			$id = $_GET['user_id'];
+
+			$sql = "SELECT U.username, U.name, U.email, S.major, S.minor, S.description FROM users U, student S WHERE U.s_id = " . $id . " AND U.s_id = S.s_id";
+
+			$result = $conn->query($sql);
+
+			$rows = array();
+
+			if ($result->num_rows > 0) {
+			    // output data of each row
+			    while($r = $result->fetch_assoc()) {
+			        $rows[] = $r;
+			    }
+			    print json_encode($rows);
+			} else {
+			    print json_encode("{}");
+			}
+		}
+		
 	}
 	else if($_SERVER['REQUEST_METHOD'] === 'POST')
 	{
