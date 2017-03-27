@@ -45,17 +45,14 @@
 
 				SET @lastId = LAST_INSERT_ID();
 
-				INSERT INTO student(s_id, uni_id) VALUES (@lastId, 1);
+				INSERT INTO student(s_id, uni_id) VALUES (@lastId, 2);
 
 				COMMIT;";
-
-				echo $sql;
 
 		$results = mysqli_multi_query($conn, $sql);
 
 		if($results)
 		{
-			echo "Successfully Created user account.";
 			$response_array['status'] = "success";
 			$response_array['message'] = $conn->error;
 			print json_encode($response_array);
