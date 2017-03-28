@@ -38,6 +38,9 @@
 	    $email = $data->email;
 	    $name = $data->name;
 	    $password = $data->password;
+	    $major = $data->major;
+	    $minor = $data->minor;
+	    $bio = $data->bio;
 
 	    $sql = "START TRANSACTION;
 
@@ -45,7 +48,7 @@
 
 				SET @lastId = LAST_INSERT_ID();
 
-				INSERT INTO student(s_id, uni_id) VALUES (@lastId, 2);
+				INSERT INTO student(s_id, uni_id, major, minor, description) VALUES (@lastId, 2, '" . $major . "', '" . $minor . "', '" . $bio . "');
 
 				COMMIT;";
 
