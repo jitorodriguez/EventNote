@@ -138,6 +138,23 @@
 				echo "Success joining rso.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
+
+				$sql = "START TRANSACTION;
+
+				SET @r = (SELECT DISTINCT A.rso_id FROM joinrso A WHERE A.rso_id = " . $rso . " AND (SELECT COUNT(B.s_id) FROM joinrso B WHERE B.rso_id = " . $rso . ") > 4);
+
+				SET @user = (SELECT s_id FROM rso WHERE rso_id = " . $rso . ");
+
+				INSERT INTO admin (rso_id, s_id) VALUES (@r, @user);
+
+				COMMIT;";
+
+				echo $sql;
+
+				$results = mysqli_multi_query($conn, $sql);
+
+				echo $conn->error;
+
 				print json_encode($response_array);
 			}
 			else
@@ -162,6 +179,23 @@
 				echo "Success leaving rso.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
+
+				$sql = "START TRANSACTION;
+
+				SET @r = (SELECT DISTINCT A.rso_id FROM joinrso A WHERE A.rso_id = " . $rso . " AND (SELECT COUNT(B.s_id) FROM joinrso B WHERE B.rso_id = " . $rso . ") < 5);
+
+				SET @user = (SELECT s_id FROM rso WHERE rso_id = " . $rso . ");
+
+				DELETE FROM admin WHERE rso_id = @r;
+
+				COMMIT;";
+
+				echo $sql;
+
+				$results = mysqli_multi_query($conn, $sql);
+
+				echo $conn->error;
+
 				print json_encode($response_array);
 			}
 			else
