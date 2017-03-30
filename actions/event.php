@@ -21,7 +21,7 @@
 			$u_id = $_GET['user_id'];
 			$uni = $_GET['uni'];
 
-			$sql = "(SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id AND E.uni_id = " . $uni . ") UNION (SELECT DISTINCT E1.e_id, E1.location_id, E1.event_type, E1.name, E1.date, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName FROM eventmeeting E1, location L1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . " AND S.uni_id = " . $uni . "))";
+			$sql = "(SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id AND E.uni_id = " . $uni . ") UNION (SELECT DISTINCT E1.e_id, E1.location_id, E1.event_type, E1.name, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName FROM eventmeeting E1, location L1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . " AND S.uni_id = " . $uni . "))";
 
 			$results = $conn->query($sql);
 
@@ -46,7 +46,7 @@
 			//student id only, find all private and public events possible
 			$u_id = $_GET['user_id'];
 
-			$sql = "SELECT DISTINCT E1.e_id, E1.location_id, E1.event_type, E1.name, E1.date, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName FROM eventmeeting E1, location L1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . ")";
+			$sql = "SELECT DISTINCT E1.e_id, E1.location_id, E1.event_type, E1.name, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName FROM eventmeeting E1, location L1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . ")";
 
 			$results = $conn->query($sql);
 
@@ -70,7 +70,7 @@
 		{
 			$u_id = $_GET['user_id'];
 
-			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L, student S WHERE E.event_type = 2 AND S.s_id =" . $u_id . " AND S.uni_id = E.uni_id AND E.location_id = L.location_id";
+			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L, student S WHERE E.event_type = 2 AND S.s_id =" . $u_id . " AND S.uni_id = E.uni_id AND E.location_id = L.location_id";
 
 			echo $sql;
 
@@ -97,7 +97,7 @@
 			//student id only, find all private and public events possible
 			$u_id = $_GET['user_id'];
 
-			$sql = "(SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id) UNION (SELECT DISTINCT E1.e_id, E1.location_id, E1.event_type, E1.name, E1.date, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName FROM eventmeeting E1, location L1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . "))";
+			$sql = "(SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id) UNION (SELECT DISTINCT E1.e_id, E1.location_id, E1.event_type, E1.name, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName FROM eventmeeting E1, location L1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . "))";
 
 			$results = $conn->query($sql);
 
@@ -122,7 +122,7 @@
 			//event id only, find this event
 			$e_id = $_GET['event_id'];
 
-			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND E.e_id = " . $e_id . " AND E.location_id = L.location_id";
+			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND E.e_id = " . $e_id . " AND E.location_id = L.location_id";
 
 			$results = $conn->query($sql);
 
@@ -145,7 +145,7 @@
 		else
 		{
 			//Nothing passed in, get public events
-			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.date, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id";
+			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id";
 
 			$results = $conn->query($sql);
 
@@ -206,24 +206,20 @@
 
 				SET @uni = (SELECT uni_id FROM student WHERE s_id = " . $id . ");
 
-				INSERT INTO eventmeeting (location_id, s_id, uni_id, event_type, name, date, start_time, end_time, description, phone_num, email) VALUES (@locationKey, " . $id . ", @uni, " . $event->event_type . ", '" . $event->name . "', '" . $event->date . "', '" . $event->start_time . "', '" . $event->end_time . "', '" . $event->description . "', " . $event->phone_num . ", '" . $event->email . "');
+				INSERT INTO eventmeeting (location_id, s_id, uni_id, event_type, name, start_time, end_time, description, phone_num, email) VALUES (@locationKey, " . $id . ", @uni, " . $event->event_type . ", '" . $event->name . "', '" . $event->start_time . "', '" . $event->end_time . "', '" . $event->description . "', " . $event->phone_num . ", '" . $event->email . "');
 
 				COMMIT;";
-
-				echo $sql;
 
 				$results = mysqli_multi_query($conn, $sql);
 
 				if($results)
 				{
-					echo "Successfully performed Event Creation transaction.";
 					$response_array['status'] = "success";
 					$response_array['message'] = "";
 					print json_encode($response_array);
 				}
 				else
 				{
-					echo "Unsuccessfully peformed Event Creation transaction.";
 					$response_array['status'] = "failure event creation";
 					$response_array['message'] = $conn->error;
 					print json_encode($response_array);
@@ -231,7 +227,6 @@
 			}
 			else
 			{
-				echo "User not permitted to create RSO. (NOT AN ADMIN)";
 				$response_array['status'] = "failure event creation (NOT ADMIN)";
 				$response_array['message'] = "";
 				print json_encode($response_array);
