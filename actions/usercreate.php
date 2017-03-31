@@ -42,13 +42,19 @@
 	    $minor = $data->minor;
 	    $bio = $data->bio;
 
+	    $emailFragment = substr($email, strpos($email, "@") + 1);
+
 	    $sql = "START TRANSACTION;
+
+				SET @uni = (SELECT (uni_id) FROM university WHERE emailtype = '" . $emailFragment . "');
 
 				INSERT INTO users (username, email, name, password) VALUES ('" . $username . "', '" . $email . "', '" . $name . "', '" . $password . "');
 
 				SET @lastId = LAST_INSERT_ID();
 
-				INSERT INTO student(s_id, uni_id, major, minor, description) VALUES (@lastId, 2, '" . $major . "', '" . $minor . "', '" . $bio . "');
+				INSERT INTO student(s_id, uni_id, major, minor, description) VALUES (@lastId, @uni, '" . $major . "', '" . $minor . "', '" . $bio . "');
+
+				DELETE FROM users WHERE s_id = @lastId AND NOT EXISTS (SELECT * FROM student S WHERE S.s_id = @lastId);
 
 				COMMIT;";
 
