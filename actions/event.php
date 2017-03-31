@@ -206,7 +206,7 @@
 
 				SET @uni = (SELECT uni_id FROM student WHERE s_id = " . $id . ");
 
-				INSERT INTO eventmeeting (location_id, s_id, uni_id, event_type, name, start_time, end_time, description, phone_num, email) VALUES (@locationKey, " . $id . ", @uni, " . $event->event_type . ", '" . $event->name . "', '" . $event->start_time . "', '" . $event->end_time . "', '" . $event->description . "', " . $event->phone_num . ", '" . $event->email . "');
+				INSERT INTO eventmeeting (location_id, s_id, uni_id, event_type, name, start_time, end_time, description, phone_num, email) VALUES (@locationKey, " . $id . ", @uni, " . $event->event_type . ", '" . $event->name . "', '" . $event->start_time . "', '" . $event->end_time . "', '" . $event->description . "', '" . $event->phone_num . "', '" . $event->email . "');
 
 				COMMIT;";
 

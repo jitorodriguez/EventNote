@@ -14,12 +14,11 @@
 	if($_SERVER['REQUEST_METHOD'] === 'GET')
 	{
 		//$id = ( isset( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) ? intval( $_GET['user_id'] ) : -1;
-
-		if(isset($_GET['rso_id']))
+		if(isset($_GET['rso_id']) && isset($_GET['user_id']))
 		{
-			$rid = $_GET['rso_id'];
+			$id = $_GET['user_id'];
 
-			$sql = "SELECT U.name AS owner, R.name, R.description, S.name AS university FROM users U, rso R, university S, student T WHERE R.rso_id = " . $rid . " AND U.s_id = R.s_id AND U.s_id = T.s_id AND T.uni_id = S.uni_id;";
+			$sql = "SELECT A.rso_id, R.name FROM admin A, rso R WHERE A.s_id = " . $id . " AND A.rso_id = R.rso_id";
 
 			$results = $conn->query($sql);
 
@@ -69,6 +68,30 @@
 			$id = $_GET['user_id'];
 
 			$sql = "SELECT R.name, R.description, R.rso_id FROM rso R, student S, student S1 WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id";
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+				print json_encode($rows);
+			} 
+			else 
+			{
+				echo $conn->error;
+				print json_encode("{}");
+			}
+		}
+		else if(isset($_GET['rso_id']))
+		{
+			$rid = $_GET['rso_id'];
+
+			$sql = "SELECT U.name AS owner, R.name, R.description, S.name AS university FROM users U, rso R, university S, student T WHERE R.rso_id = " . $rid . " AND U.s_id = R.s_id AND U.s_id = T.s_id AND T.uni_id = S.uni_id;";
 
 			$results = $conn->query($sql);
 
