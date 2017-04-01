@@ -38,12 +38,11 @@
 				print json_encode("{}");
 			}
 		}
-		else if(isset($_GET['user_id']) && isset($_GET['admin']))
+		else if(isset($_GET['user_id']) && isset($_GET['events']))
 		{
-			//Get RSO user can possibly create event for
 			$id = $_GET['user_id'];
 
-			$sql = "SELECT R.name, R.rso_id FROM rso R WHERE R.s_id = " . $id . ";";
+			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE E.rso_id IN (SELECT rso_id FROM joinrso WHERE s_id = " . $id . ") AND E.location_id = L.location_id";
 
 			$results = $conn->query($sql);
 
@@ -63,7 +62,7 @@
 				print json_encode("{}");
 			}
 		}
-		else if(isset($_GET['user_id']))
+		else if(isset($_GET['user_id']) && isset($_GET['rso'])) //GET ALL RSO FOR USER TO BROWSE
 		{
 			$id = $_GET['user_id'];
 
@@ -111,10 +110,37 @@
 				print json_encode("{}");
 			}
 		}
-		else
+		else if(isset($_GET['user_id']))
 		{
-			//Get all Rso_id's with associated name to later create event
+			$id = $_GET['user_id'];
+			//GET ALL RSO GROUPS AND RSO EVENTS USER CAN INTERACT WITH
 
+			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName FROM eventmeeting E, location L WHERE E.rso_id IN (SELECT rso_id FROM joinrso WHERE s_id = " . $id . ") AND E.location_id = L.location_id";
+
+			$results = $conn->query($sql);
+
+			$rows = array();
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+			}
+
+			$sql = "SELECT R.name, R.description, R.rso_id FROM rso R, student S, student S1 WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id";
+
+			$results = $conn->query($sql);
+
+			if ($results->num_rows > 0) 
+			{
+				// output data of each row
+				while($r = $results->fetch_assoc()) {
+					$rows[] = $r;
+				}
+			}
+			print json_encode($rows);
 		}
 	}
 	else if($_SERVER['REQUEST_METHOD'] === 'POST')
