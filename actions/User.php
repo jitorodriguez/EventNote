@@ -70,7 +70,7 @@
 				$user = $data->user;
 				$pass = $data->pass;
 
-				$sql = "SELECT U.s_id FROM users U WHERE U.username = '" . $user . "' AND U.password = '" . $pass . "';"; 
+				$sql = "SELECT U.s_id, L.latitude, L.longitude FROM users U, university L, student S WHERE U.username = '" . $user . "' AND U.password = '" . $pass . "' AND U.s_id = S.s_id AND S.uni_id = L.uni_id;"; 
 
 				$result = $conn->query($sql);
 
