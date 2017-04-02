@@ -66,7 +66,7 @@
 		{
 			$id = $_GET['user_id'];
 
-			$sql = "SELECT R.name, R.description, R.rso_id FROM rso R, student S, student S1 WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id";
+			$sql = "SELECT R.name, R.description, R.rso_id, U.name AS creatorName FROM rso R, student S, student S1, users U WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id AND S1.s_id = U.s_id";
 
 			$results = $conn->query($sql);
 
