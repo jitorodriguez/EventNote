@@ -81,9 +81,33 @@
 				    while($r = $result->fetch_assoc()) {
 				        $rows[] = $r;
 				    }
+
 				    print json_encode($rows);
+
+				    //print json_encode($rows);
+
 				} else {
-				    print json_encode("{}");
+
+					//Check for SuperAdmin
+					$sql = "SELECT U.s_id FROM users U, superadmin S WHERE U.username = '" . $user . "' AND U.password = '" . $pass . "' AND U.s_id = S.s_id;";
+
+					$result = $conn->query($sql);
+
+					$rows = array();
+
+					if ($result->num_rows > 0) {
+					    // output data of each row
+					    while($r = $result->fetch_assoc()) {
+					        $rows[] = $r;
+					    }
+
+					    $rows[0]['superAdmin'] = 1;
+					    $rows[0]['latitude'] = 50;
+					    $rows[0]['longitude'] = 0;
+					    print json_encode($rows);
+					}else{
+						print json_encode("{}");
+					}
 				}
 		}
 	}
