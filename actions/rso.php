@@ -159,14 +159,12 @@
 
 			if($results)
 			{
-				echo "Success creating rso.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
 				print json_encode($response_array);
 			}
 			else
 			{
-				echo "Unsuccessfully created rso.";
 				$response_array['status'] = "failure creating rso";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
