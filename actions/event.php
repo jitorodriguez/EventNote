@@ -234,14 +234,12 @@
 
 			if($results)
 			{
-				echo "Success deleting event.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
 				print json_encode($response_array);
 			}
 			else
 			{
-				echo "Unsuccessfully deleted event.";
 				$response_array['status'] = "failure deleting event";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
