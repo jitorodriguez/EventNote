@@ -42,7 +42,7 @@
 		{
 			$id = $_GET['user_id'];
 
-			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.s_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName, R.name AS rso_name, U.name AS creatorName FROM eventmeeting E, location L, rso R, users U WHERE E.rso_id IN (SELECT rso_id FROM joinrso WHERE s_id = " . $id . ") AND E.location_id = L.location_id AND E.rso_id = R.rso_id AND E.s_id = U.s_id";
+			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.s_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName, R.name AS rso_name, U.name AS creatorName, R.rso_id FROM eventmeeting E, location L, rso R, users U WHERE E.rso_id IN (SELECT rso_id FROM joinrso WHERE s_id = " . $id . ") AND E.location_id = L.location_id AND E.rso_id = R.rso_id AND E.s_id = U.s_id";
 
 			$results = $conn->query($sql);
 
@@ -115,7 +115,7 @@
 			$id = $_GET['user_id'];
 			//GET ALL RSO GROUPS AND RSO EVENTS USER CAN INTERACT WITH
 
-			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.s_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName, R.name AS rso_name, U.name AS creatorName FROM eventmeeting E, location L, rso R, users U WHERE E.rso_id IN (SELECT rso_id FROM joinrso WHERE s_id = " . $id . ") AND E.location_id = L.location_id AND E.rso_id = R.rso_id AND E.s_id = U.s_id";
+			$sql = "SELECT DISTINCT E.e_id, E.location_id, E.s_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName, R.name AS rso_name, U.name AS creatorName, R.rso_id FROM eventmeeting E, location L, rso R, users U WHERE E.rso_id IN (SELECT rso_id FROM joinrso WHERE s_id = " . $id . ") AND E.location_id = L.location_id AND E.rso_id = R.rso_id AND E.s_id = U.s_id";
 
 			$results = $conn->query($sql);
 
