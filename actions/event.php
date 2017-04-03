@@ -115,7 +115,7 @@
 			//student id only, find all private and public events possible
 			$u_id = $_GET['user_id'];
 
-			$sql = "(SELECT DISTINCT E.e_id, E.location_id, E.s_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName, U.name AS creatorName FROM eventmeeting E, location L, users U WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id AND E.s_id = U.s_id) UNION (SELECT DISTINCT E1.e_id, E1.location_id, E1.s_id, E1.event_type, E1.name, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName, U1.name AS creatorName FROM eventmeeting E1, location L1, users U1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.s_id = U1.s_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . "))";
+			$sql = "(SELECT DISTINCT E.e_id, E.location_id, E.s_id, E.event_type, E.name, E.start_time, E.end_time, E.description, E.phone_num, E.email, L.latitude, L.longitude, L.specificName, U.name AS creatorName FROM eventmeeting E, location L, users U, student S1 WHERE approved_by_superadmin = 1 AND event_type = 0 AND E.location_id = L.location_id AND E.s_id = U.s_id AND S1.s_id = " . $u_id . ") UNION (SELECT DISTINCT E1.e_id, E1.location_id, E1.s_id, E1.event_type, E1.name, E1.start_time, E1.end_time, E1.description, E1.phone_num, E1.email, L1.latitude, L1.longitude, L1.specificName, U1.name AS creatorName FROM eventmeeting E1, location L1, users U1 WHERE approved_by_superadmin = 1 AND event_type = 1 AND E1.location_id = L1.location_id AND E1.s_id = U1.s_id AND E1.uni_id IN (SELECT S.uni_id FROM student S WHERE S.s_id = " . $u_id . "))";
 
 			$results = $conn->query($sql);
 
@@ -123,7 +123,7 @@
 
 			if ($results->num_rows > 0) 
 			{
-				echo "\n THIS IS A REGULAR USER \n ";
+				//echo "\n THIS IS A REGULAR USER \n ";
 				// output data of each row
 				while($r = $results->fetch_assoc()) {
 					$rows[] = $r;
@@ -137,7 +137,7 @@
 
 				$results = $conn->query($sql);
 
-				echo "\n THIS IS THIS SUPER ADMIN \n";
+				//echo "\n THIS IS THIS SUPER ADMIN \n";
 
 				$rows = array();
 
