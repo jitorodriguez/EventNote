@@ -292,7 +292,7 @@
 
 			$sql = "START TRANSACTION;
 
-			UPDATE eventmeeting SET name='" . $event->name . "', start_time='" . $event->start_time . "', end_time='" . $event->end_time . "', description='" . $event->description . "', phone_num=" . $event->phone_num . ", email='" . $event->email . "' WHERE e_id=" . $event->e_id . " AND s_id = " . $id . ";
+			UPDATE eventmeeting SET name='" . $event->name . "', start_time='" . $event->start_time . "', end_time='" . $event->end_time . "', description='" . $event->description . "', phone_num='" . $event->phone_num . "', email='" . $event->email . "' WHERE e_id=" . $event->e_id . " AND s_id = " . $id . ";
 
 			SET @locationKey = (SELECT location_id FROM eventmeeting WHERE e_id =" . $event->e_id . " AND s_id =" . $id . ");
 
