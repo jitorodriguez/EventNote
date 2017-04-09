@@ -274,7 +274,7 @@
 			$id = $data->user_id;
 			$rso = $data->rso_info;
 
-			$sql = "INSERT INTO rso SET name = '" . $rso->name . "', description = '" . $rso->description . "' WHERE rso_id = " . $rso->rso_id . " AND s_id = " . $id . ";";
+			$sql = "UPDATE rso SET name = '" . $rso->name . "', description = '" . $rso->description . "' WHERE rso_id = " . $rso->rso_id . " AND s_id = " . $id . ";";
 
 			$results = $conn->query($sql);
 
@@ -286,7 +286,7 @@
 			}
 			else
 			{
-				$response_array['status'] = "failure creating rso";
+				$response_array['status'] = "failure changing rso";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
 			}
