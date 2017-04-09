@@ -66,7 +66,7 @@
 		{
 			$id = $_GET['user_id'];
 
-			$sql = "SELECT R.name, R.description, R.rso_id, R.s_id, U.name AS creatorName FROM rso R, student S, student S1, users U WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id AND S1.s_id = U.s_id";
+			$sql = "SELECT R.name, R.description, R.rso_id, R.s_id, U.name AS creatorName, (CASE WHEN EXISTS(SELECT NULL FROM joinrso J WHERE J.rso_id = R.rso_id AND J.s_id = " . $id . ") THEN 1 ELSE 0 END) AS isPartOf FROM rso R, student S, student S1, users U WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id AND S1.s_id = U.s_id";
 
 			$results = $conn->query($sql);
 
@@ -129,7 +129,8 @@
 				}
 			}
 
-			$sql = "SELECT R.name, R.description, R.rso_id, R.s_id, U.name AS creatorName FROM rso R, student S, student S1, users U WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id AND S1.s_id = U.s_id";
+			$sql = "SELECT R.name, R.description, R.rso_id, R.s_id, U.name AS creatorName, (CASE WHEN EXISTS(SELECT NULL FROM joinrso J WHERE J.rso_id = R.rso_id AND J.s_id = " . $id . ") THEN 1 ELSE 0 END) AS isPartOf FROM rso R, student S, student S1, users U WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id AND S1.s_id = U.s_id";
+			//$sql = "SELECT R.name, R.description, R.rso_id, R.s_id, U.name AS creatorName FROM rso R, student S, student S1, users U WHERE S.s_id =" . $id . " AND S1.s_id = R.s_id AND S.uni_id = S1.uni_id AND S1.s_id = U.s_id";
 
 			$results = $conn->query($sql);
 
