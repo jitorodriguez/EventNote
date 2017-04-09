@@ -20,9 +20,7 @@
 
 			$event_id = $_GET['event_id'];
 
-			$sql = "SELECT U.username, C.comment, DATE(C.dateCreated) AS date FROM users U, comments C WHERE C.e_id = " . $event_id . " AND U.s_id = C.s_id ORDER BY DATE(C.dateCreated) DESC";
-
-			echo $sql;
+			$sql = "SELECT U.s_id, U.username, C.comment, DATE(C.dateCreated) AS date FROM users U, comments C WHERE C.e_id = " . $event_id . " AND U.s_id = C.s_id ORDER BY DATE(C.dateCreated) DESC";
 
 			$results = $conn->query($sql);
 
@@ -39,7 +37,6 @@
 			} 
 			else 
 			{
-				echo $conn->error;
 				print json_encode("{}");
 			}
 		}
@@ -62,14 +59,12 @@
 
 			if($results)
 			{
-				echo "Success creating comment.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
 				print json_encode($response_array);
 			}
 			else
 			{
-				echo "Unsuccessfully created comment.";
 				$response_array['status'] = "failure creating comment";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
@@ -87,14 +82,12 @@
 
 			if($results)
 			{
-				echo "Success creating comment.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
 				print json_encode($response_array);
 			}
 			else
 			{
-				echo "Unsuccessfully created comment.";
 				$response_array['status'] = "failure creating comment";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
@@ -111,14 +104,12 @@
 
 			if($results)
 			{
-				echo "Success creating comment.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
 				print json_encode($response_array);
 			}
 			else
 			{
-				echo "Unsuccessfully created comment.";
 				$response_array['status'] = "failure creating comment";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
