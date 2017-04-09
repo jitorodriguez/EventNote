@@ -269,6 +269,28 @@
 				print json_encode($response_array);
 			}
 		}
+		else if($cmdtype === "update")
+		{
+			$id = $data->user_id;
+			$rso = $data->rso_info;
+
+			$sql = "INSERT INTO rso SET name = '" . $rso->name . "', description = '" . $rso->description . "' WHERE rso_id = " . $rso->rso_id . " AND s_id = " . $id . ";";
+
+			$results = $conn->query($sql);
+
+			if($results)
+			{
+				$response_array['status'] = "success";
+				$response_array['message'] = "";
+				print json_encode($response_array);
+			}
+			else
+			{
+				$response_array['status'] = "failure creating rso";
+				$response_array['message'] = $conn->error;
+				print json_encode($response_array);
+			}
+		}
 
 	}
 
