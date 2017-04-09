@@ -258,7 +258,7 @@
 
 			if($results)
 			{
-				$response_array['status'] = "successfully deleted rso";
+				$response_array['status'] = "success";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
 			}
