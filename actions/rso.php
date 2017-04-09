@@ -182,7 +182,6 @@
 
 			if($results)
 			{
-				echo "Success joining rso.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
 
@@ -196,17 +195,12 @@
 
 				COMMIT;";
 
-				echo $sql;
-
 				$results = mysqli_multi_query($conn, $sql);
-
-				echo $conn->error;
 
 				print json_encode($response_array);
 			}
 			else
 			{
-				echo "Failure joining rso.";
 				$response_array['status'] = "failure joining rso";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
@@ -223,7 +217,6 @@
 
 			if($results)
 			{
-				echo "Success leaving rso.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
 
@@ -237,17 +230,12 @@
 
 				COMMIT;";
 
-				echo $sql;
-
 				$results = mysqli_multi_query($conn, $sql);
-
-				echo $conn->error;
 
 				print json_encode($response_array);
 			}
 			else
 			{
-				echo "Failure leaving rso.";
 				$response_array['status'] = "failure leaving rso";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
@@ -266,20 +254,16 @@
 
 			COMMIT;";
 
-			echo $sql;
-
 			$results = mysqli_multi_query($conn, $sql);
 
 			if($results)
 			{
-				echo "Success deleting rso.";
 				$response_array['status'] = "successfully deleted rso";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
 			}
 			else
 			{
-				echo "Unsuccessfully deleted rso.";
 				$response_array['status'] = "failure deleting rso";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
