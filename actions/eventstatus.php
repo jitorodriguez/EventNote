@@ -37,7 +37,6 @@
 			} 
 			else 
 			{
-				echo $conn->error;
 				print json_encode("{}");
 			}
 		}
@@ -63,7 +62,6 @@
 			} 
 			else 
 			{
-				echo $conn->error;
 				print json_encode("{}");
 			}
 		}
@@ -86,14 +84,12 @@
 
 			if($results)
 			{
-				echo "Success updated event status.";
 				$response_array['status'] = "success";
 				$response_array['message'] = "";
 				print json_encode($response_array);
 			}
 			else
 			{
-				echo "Unsuccessfully updated event status.";
 				$response_array['status'] = "failure updating event status";
 				$response_array['message'] = $conn->error;
 				print json_encode($response_array);
